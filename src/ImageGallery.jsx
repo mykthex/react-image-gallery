@@ -86,7 +86,16 @@ export default class ImageGallery extends React.Component {
     stopPropagation: PropTypes.bool,
     additionalClass: PropTypes.string,
     useTranslate3D: PropTypes.bool,
-    isRTL: PropTypes.bool
+    isRTL: PropTypes.bool,
+    ariaSlideText: PropTypes.string,
+    ariaFullScreenText: PropTypes.string,
+    ariaPlayPauseText: PropTypes.string,
+    ariaNextSlideText: PropTypes.string,
+    ariaPrevSlideText: PropTypes.string,
+    ariaThumbnailWrapperText: PropTypes.string,
+    ariaThumbnailItemText: PropTypes.string,
+    ariaDotsWrapperText: PropTypes.string,
+    ariaDotsItemText: PropTypes.string,
   };
 
   static defaultProps = {
@@ -116,6 +125,15 @@ export default class ImageGallery extends React.Component {
     swipingTransitionDuration: 0,
     slideInterval: 3000,
     swipeThreshold: 30,
+    ariaSlideText: '',
+    ariaFullScreenText: 'Open Fullscreen',
+    ariaPlayPauseText: 'Play or Pause Slideshow',
+    ariaNextSlideText: 'Next slide',
+    ariaPrevSlideText: 'Previous slide',
+    ariaThumbnailWrapperText: 'Thumbnail Navigation',
+    ariaThumbnailItemText: 'Go to',
+    ariaDotsWrapperText: 'Dots Navigation',
+    ariaDotsItemText: 'Go to',
     renderLeftNav: (onClick, disabled) => {
       return (
         <button
@@ -123,7 +141,7 @@ export default class ImageGallery extends React.Component {
           className='image-gallery-left-nav'
           disabled={disabled}
           onClick={onClick}
-          aria-label='Previous Slide'
+          aria-label={props.ariaPrevSlideText}
         />
       );
     },
@@ -134,7 +152,7 @@ export default class ImageGallery extends React.Component {
           className='image-gallery-right-nav'
           disabled={disabled}
           onClick={onClick}
-          aria-label='Next Slide'
+          aria-label={props.ariaNextSlideText}
         />
       );
     },
@@ -145,7 +163,7 @@ export default class ImageGallery extends React.Component {
           className={
             `image-gallery-play-button${isPlaying ? ' active' : ''}`}
           onClick={onClick}
-          aria-label='Play or Pause Slideshow'
+          aria-label={props.ariaPlayPauseText}
         />
       );
     },
@@ -156,7 +174,7 @@ export default class ImageGallery extends React.Component {
           className={
             `image-gallery-fullscreen-button${isFullscreen ? ' active' : ''}`}
           onClick={onClick}
-          aria-label='Open Fullscreen'
+          aria-label={props.ariaFullScreenText}
         />
       );
     },
@@ -1024,11 +1042,11 @@ export default class ImageGallery extends React.Component {
 
       if (this.props.showThumbnails) {
         thumbnails.push(
-          <a
+          <button
             key={index}
             role='button'
             aria-pressed={currentIndex === index ? 'true' : 'false'}
-            aria-label={`Go to Slide ${index + 1}`}
+            aria-label={`${this.props.ariaThumbnailItemText} ${index + 1}`}
             className={
               'image-gallery-thumbnail' +
               (currentIndex === index ? ' active' : '') +
@@ -1037,7 +1055,7 @@ export default class ImageGallery extends React.Component {
             onClick={event => this._onThumbnailClick(event, index)}
           >
             {renderThumbInner(item)}
-          </a>
+          </button>
         );
       }
 
@@ -1059,7 +1077,7 @@ export default class ImageGallery extends React.Component {
             ].join(' ')}
             onClick={bulletOnClick}
             aria-pressed={currentIndex === index ? 'true' : 'false'}
-            aria-label={`Go to Slide ${index + 1}`}
+            aria-label={`${this.props.ariaDotsItemText} ${index + 1}`}
           >
           </button>
         );
@@ -1120,7 +1138,7 @@ export default class ImageGallery extends React.Component {
               <div
                 className='image-gallery-bullets-container'
                 role='navigation'
-                aria-label='Bullet Navigation'
+                aria-label={this.props.ariaDotsWrapperText}
               >
                 {bullets}
               </div>
@@ -1178,7 +1196,7 @@ export default class ImageGallery extends React.Component {
                     ref={t => this._thumbnails = t}
                     className='image-gallery-thumbnails-container'
                     style={thumbnailStyle}
-                    aria-label='Thumbnail Navigation'
+                    aria-label={this.props.ariaThumbnailWrapperText}
                   >
                     {thumbnails}
                   </div>
